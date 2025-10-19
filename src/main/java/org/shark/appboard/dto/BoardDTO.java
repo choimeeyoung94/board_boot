@@ -5,36 +5,30 @@ import java.time.LocalDateTime;
 import org.shark.appboard.entity.Board;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Builder
+@Getter
+@Setter
 public class BoardDTO {
-	private Long bid;
-	private String title;
-	private String content;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
-	
-	public Board toEntity() {
-		return Board.createBoard(title, content);
-	}
-	
-	public static BoardDTO toDTO(Board board) {
-		return BoardDTO.builder()
-				.title(board.getTitle())
-				.content(board.getContent())
-				.createdAt(board.getCreatedAt())
-				.updatedAt(board.getUpdatedAt())
-				.build();
-	}
-	
+
+    private Long bid;
+    private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public static BoardDTO toDTO(Board board) {
+        BoardDTO dto = new BoardDTO();
+        dto.setBid(board.getBid());
+        dto.setTitle(board.getTitle());
+        dto.setContent(board.getContent());
+        dto.setCreatedAt(board.getCreatedAt());
+        dto.setUpdatedAt(board.getUpdatedAt());
+        return dto;
+    }
 }

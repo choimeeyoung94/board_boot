@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.shark.appboard.dto.response.ResponseBoardDTO;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,45 +18,48 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Entity
 @Table(name = "boards")
-@DynamicUpdate // update 쿼리를 만들때 변경된 내용만 업데이트 해달라
+@DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long bid;
-	
-	@Column(nullable = false, length = 200)
-	private String title;
-	
-	@Column(columnDefinition = "TEXT")
-	private String content;
-	
-	@CreationTimestamp
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-	
-	@LastModifiedDate
-	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long bid;
 
-	public Board() {}
-	
-	public static Board createBoard(String title, String content) {
-		Board board = new Board();
-		board.setTitle(title);
-		board.setContent(content);
-		return board;
-	}
-	
-	@Override
-	public String toString() {
-		return "Board [bid=" + bid + ", title=" + title + ", content=" + content + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + "]";
-	}
-	
+    @Column(nullable = false, length = 200)
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public Board() {}
+
+    public static Board createBoard(String title, String content) {
+        Board board = new Board();
+        board.setTitle(title);
+        board.setContent(content);
+        return board;
+    }
+
+    // 단건 응답용 DTO로 변환
+    public ResponseBoardDTO toDTO() {
+        return new ResponseBoardDTO(bid, title, content, createdAt, updatedAt);
+    }
+
+    @Override
+    public String toString() {
+        return "Board [bid=" + bid + ", title=" + title + ", content=" + content + ", createdAt=" + createdAt
+                + ", updatedAt=" + updatedAt + "]";
+    }
 }
